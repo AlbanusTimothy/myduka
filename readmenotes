@@ -1,0 +1,26 @@
+OBJECT ORIENTED PROGRAMMING
+We have the following broad categories of classifying datatypes
+  1.  inbuilt datatypes-- this are those that come with the programming language
+  eg. in py we have int,float,str,bool,list,tuple,set,dict
+  2. user defined data types-- are those that are created by the programmer--enaled by the use of classes and objects eg person,student,car
+**OOP**-->A programming paradigm that buids programs around classes and objects
+**classes**->A  blueprint or a template for creating objects
+**objects**--> an instance of a clas
+a class has the followin 2 things
+ 1. Attribtes--> the variables holding data in a class..they answer the question:what does a class have
+ eg. class person-name,age,height,weight,marital status,
+ class car- engine,yom,make,model,colour,horsepower,torque
+ class laptop-- width,ram,processors,storage
+ 2. Behaviour
+     ->defined by methos
+     -> mthods are simply funtions inside classes
+     ->behaviour answers the quesion what can a class do?
+     eg class person--walk,talk,eat,sleep,work
+     class car-start,move,stop
+     class laptop-start,shutdown,code send mail
+**methods**-->unctions insideclasses
+**constuctor**--> a special method used to initialize objects
+-->it is automatically called when an object is created
+-->python constructor is ** def __init__(self,parameters)
+**self**--> references the object itself
+**parameters**
