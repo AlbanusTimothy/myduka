@@ -24,3 +24,27 @@ a class has the followin 2 things
 -->python constructor is ** def __init__(self,parameters)
 **self**--> references the object itself
 **parameters**
+
+
+
+
+
+**Inheritance**
+-->This is a concept that allows one class to acquire/inherit properties from another class
+-->it allows you to re use code instead of rewritting everything
+
+**why do we need inheritance**
+1. it avoids duplicated code
+2. adds new features to an existing class
+3. allows a behaviour modification
+
+**child class**-the class nheriting props from another class--also called derived class
+**paent class**--the class from which prperties are inherited--also called the base class
+
+**types of inheritance**
+1. single inheritance-- child class inherits from a single parent class
+2. multiple inheritance--a child class inherits from more than one parent class
+3. multilevel in heritance--a child class nherits from a parent and the parent also inherits from another class
+
+
+**method overriding**--> occcurs when a child provides its own implementation ofa method that alredy exists in the parent class...so basically the childs method replaces the parents method when called by the child object
