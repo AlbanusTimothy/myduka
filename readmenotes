@@ -48,3 +48,125 @@ a class has the followin 2 things
 
 
 **method overriding**--> occcurs when a child provides its own implementation ofa method that alredy exists in the parent class...so basically the childs method replaces the parents method when called by the child object
+
+
+
+Flask
+1. Routing
+->A mechanism to map/connect urls to python functions. its a a system for resource navigation--connects a ur to a function in your flask app
+**URL** - Uniform Resource Locater- full address used to access resources on the web
+**parts of a url**
+1. protocol--tells the browser how to communicate eh http and https
+**http** -sends data as raw text
+**https** - data is encrypted
+2. domain name-name of the website eg meet.google.com
+3. port (optional)-where exactly to find the service
+4. path-the specific page or resource eg /about, /contacts
+
+in Flask, routing is executed using a decorator function--->@app.route()
+**Decorator Function**-->a function that allows you to modify the behaviour of another function-->they have the prefix @
+
+The @app.route() decorator function can take some parameters eg
+a) Rule/path--the path that a user accesses
+b)Methods
+**index route** - / --> default home/landing page
+
+@app.route()-----decorator function(enables routing)
+def home():---->view function__responsible for returning resources
+    return "This is the index route"--->resource to be returned
+
+**every view function must have its own unique name**   
+
+
+
+*Instead of returning raw data in our routes , we instead return / render full html pages and the subsequently render our data in those pages *To render /return html pages in Flask , we use a function called render_template() which is imported from Flask *The render_template() function takes as an argument the name of a html file in string format e.g. render_template("index.html")
+
+TEMPLATE INHERITANCE A mechanism of reducing redundancy in creating html files by having one base template which contains all common html components e.g navbar , footer -> Uses Jinja syntax -> Create one base template -> base.html, layout.html -> Have the other html files inherit common features from it
+
+{% extends 'base.html' %} --> inherit features from base template {% block title %} {% endblock %}---> where to put my title for child templates {% block content %} {% endblock %} --> block where you place each page's unique content
+
+Task: - Apply template inheritance to the remaining html files
+
+
+**Display Data in the browser/clients**
+->how? - Tables
+-->database-->flask--->html
+
+jinja
+{% %}
+ - a syntax inbuilt with flask to render python data
+ -a templating engine intergrated with flask to render dynamic html pages
+
+**KEY FEATURES OF JINJA**
+1. when handling variables use the following jinja syntax-{{}}
+2. when handling control structures - {%  %}
+**control structures** this are the building blocks that manage the flow of the execution in a programme
+ a) sequence-> programmes execute top to bottom and left to right
+ b)selection
+  ->decision making in a programme
+  ->conditional statements-->if....else..
+ c)repitition
+  ->loop--> for and while loops
+
+**jinja control structures syntax**
+for loop
+       
+       {% for .... %}--initialization
+
+       {% endfor %}---termination
+
+       {% if.... %}
+
+       {% endif %}
+
+
+
+
+
+**Posting data from the client**
+posting-- sending data to a server
+
+**steps**
+1. user is going to be provided with a form to fill some data
+2. user submits the form--submitted to a flask route
+3. flask extracts data from the form and processes it
+   -> data coming from this form comes in the format of key-value pairs
+   "product_name":"eggs"
+   "buying_price":"29"
+   value--whatever the user fills in the form
+   key--defined by the name attribute in form input
+     ->we extract form data using a request object which has access to the following methods
+           a)  request.form--used to access and extract form values using the key
+           b)request.method--method used to determine method defined
+4. store/insert data using our functions
+5. redirect the user
+   -> we redirect a user using the redirect and url_for methods
+   ->redirect()->functionality to enable redirection
+   ->url_for()--where exactly do i take a user?
+              ---takes
+
+**form checklist**
+a) action attribute
+    ->an attribute that defines the route where the form data is to be submitted for processing
+    e.g action ='/add_products'
+b) method
+    ->what do you want the server to do with the source/data
+c) name attribute
+    -> a key used to access and extract values from  the form input
+d) input type
+    ->eg email,number,text,password
+e) button - type submit
+
+      **http methods**
+      ->GET--Getting/fetching data e.g. displaying products/sales,getting ig posts,tweets
+      ->POST-sending ata to a server e.g. adding products,making sales,tweeting
+      ->PUT--updating an existing resource e.g. changing password,changing product name
+      ->DELETE--getting rid of a resource--e.g. deleting a product
+      **http status code
+      100-199--informational responses
+      200-299-- successful repsomses
+      300-399---redirection messages
+      400-499 --client err
+
+
+
