@@ -1,6 +1,17 @@
 import psycopg2
 conn = psycopg2.connect(host="localhost",port="5432",user="postgres",password="Alabaalaba0!",dbname="myduka_db")
 
+# get connection
+def get_connection():
+    return psycopg2.connect(
+        host="localhost",
+        port="5432",
+        user="postgres",
+        password="Alabaalaba0!",
+        dbname="myduka_db"
+    )
+
+
 
 cur=conn.cursor()
 

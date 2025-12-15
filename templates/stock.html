@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %} stock {% endblock %}
+{% block content %}
+<div>
+    <div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stockModal">
+        Add Stock
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="stockModalLabel">Adding Stock</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="/add_stock" method="post">
+
+                        <div class="mb-3">
+                            <select class="form-select" name="pid">
+                                <option selected>Select Product</option>
+                                {% for product in products %}
+                                <option value="{{ product[0] }}">{{ product[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" name="Quantity" class="form-control">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add Stock</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <table id="stockTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Stock ID</th>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Created at</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock[0] }}</td>
+                <td>{{ stock[1] }}</td>
+                <td>{{ stock[2] }}</td>
+                <td>{{ stock[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</div>
+
+
+
+
+{% endblock %}
