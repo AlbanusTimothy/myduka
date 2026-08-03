@@ -1,8 +1,34 @@
 {% extends 'base.html' %}
 {% block title %} log in {% endblock %}
-{% block content %} 
-<div>
-    <p>kindly log in to your account</p>
+{% block content %}
+
+<div class="auth-wrapper d-flex justify-content-center align-items-center">
+    <div class="auth-card card shadow-sm p-4">
+        <div class="text-center mb-3">
+            <h3 class="fw-bold mb-1">Welcome Back</h3>
+            <p class="text-muted mb-0">Log in to your MyDuka account</p>
+        </div>
+
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="loginEmail"
+                    placeholder="Enter your email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="loginPassword"
+                    placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <p class="text-center text-muted mt-3 mb-0">
+            Don't have an account? <a href="/register">Register here</a>
+        </p>
+    </div>
 </div>
 
 {% endblock %}

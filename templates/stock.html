@@ -1,78 +1,82 @@
 {% extends 'base.html' %}
 {% block title %} stock {% endblock %}
 {% block content %}
-<div>
+
+<div class="section-card mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
     <div>
-    <!-- Button trigger modal -->
+        <h3 class="fw-bold mb-1">Stock</h3>
+        <p class="text-muted mb-0">Track incoming stock for your products</p>
+    </div>
+
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stockModal">
-        Add Stock
+        <i class="bi bi-plus-lg me-1"></i> Add Stock
     </button>
+</div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="stockModalLabel">Adding Stock</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form action="/add_stock" method="post">
-
-                        <div class="mb-3">
-                            <select class="form-select" name="pid">
-                                <option selected>Select Product</option>
-                                {% for product in products %}
-                                <option value="{{ product[0] }}">{{ product[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Quantity</label>
-                            <input type="number" name="Quantity" class="form-control">
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Stock</button>
-                        </div>
-
-                    </form>
-                </div>
-
+<!-- Modal: now a DIRECT child of content-wrapper, matching the working pages -->
+<div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="stockModalLabel">Adding Stock</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
+            <div class="modal-body">
+                <form action="/add_stock" method="post">
+
+                    <div class="mb-3">
+                        <label for="stockPidSelect" class="form-label">Product</label>
+                        <select class="form-select" name="pid" id="stockPidSelect" required>
+                            <option value="" selected disabled>Select Product</option>
+                            {% for product in products %}
+                            <option value="{{ product[0] }}">{{ product[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stockQuantityInput" class="form-label">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" id="stockQuantityInput" min="1" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </div>
+
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
-<div>
-    <table id="stockTable" class="table table-striped">
-        <thead>
-            <tr>
-                <th>Stock ID</th>
-                <th>Product ID</th>
-                <th>Quantity</th>
-                <th>Created at</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for stock in stocks %}
-            <tr>
-                <td>{{ stock[0] }}</td>
-                <td>{{ stock[1] }}</td>
-                <td>{{ stock[2] }}</td>
-                <td>{{ stock[3] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+<div class="table-shell">
+    <div class="table-responsive">
+        <table id="example" class="table nice-table">
+            <thead>
+                <tr>
+                    <th>Stock ID</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Created at</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in stock %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>{{ item[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
-
-</div>
-
-
-
 
 {% endblock %}

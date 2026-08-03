@@ -5,80 +5,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
+
+    <!-- Bootstrap CSS (single copy only) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons (NEW - used for WhatsApp/Call/Instagram icons in footer) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap5.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap5.js"></script>
+
+    <!-- Chart.js (NEW - for dashboard analytics charts) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='mydukafavicon.png') }}">
+
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid page-wrapper">
+
         <div>
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">MyDuka</a>
+                    <a class="navbar-brand" href="/">MyDuka</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                                <a class="nav-link {{ 'active' if request.path == '/' else '' }}"
+                                    aria-current="page" href="/">Home</a>
+                            </li>
+                            {% if not session.email %}
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.path == '/register' else '' }}"
+                                    href="/register">Register</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.path == '/login' else '' }}"
+                                    href="/login">Login</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.path == '/products' else '' }}"
+                                    href="/products">Products</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/register">Register</a>
+                                <a class="nav-link {{ 'active' if request.path == '/sales' else '' }}"
+                                    href="/sales">Sales</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="/login">Login</a>
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.path == '/dashboard' else '' }}"
+                                    href="/dashboard">Dashboard</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="/products">Products</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Logout</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="/sales">Sales</a>
-                            </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="/dashboard">Dashboard</a>
-                            </li>
-                            
-                           
+                            {% endif %}
                         </ul>
-                       
                     </div>
                 </div>
             </nav>
+
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
         </div>
 
-        {% block content %} {% endblock %}
+        <main class="content-wrapper flex-grow-1">
+            {% block content %}{% endblock %}
+        </main>
 
-        <div>
+
+        <!-- FOOTER (rebuilt with contact icons + FAQ/ToS links) -->
+        <div class="footer-card">
             <div class="card">
-                <div class="card-header">
-                    Featured
-                </div>
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <div class="row gy-4">
+
+                        <div class="col-md-4">
+                            <h6 class="footer-heading">MyDuka Inventory System</h6>
+                            <p class="footer-text mb-1">
+                                A simple point-of-sale and inventory management system
+                                built for small shops and dukas.
+                            </p>
+                            <p class="footer-text mb-0">
+                                Developed by <strong>Albanus Timothy</strong>
+                            </p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h6 class="footer-heading">Quick Links</h6>
+                            <ul class="footer-links list-unstyled mb-0">
+                                <li><a href="/#faqs">FAQs</a></li>
+                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#tosModal">Terms of Service</a></li>
+                                <li><a href="/#features">Features</a></li>
+                                <li><a href="/#reviews">Customer Reviews</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h6 class="footer-heading">Get in Touch</h6>
+                            <div class="footer-contact-icons">
+                                <a href="https://wa.me/254790548479" target="_blank" rel="noopener" title="WhatsApp">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                                <a href="tel:+254790548479" title="Call">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </a>
+                                <a href="https://instagram.com/ym.albas" target="_blank" rel="noopener" title="Instagram">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                            </div>
+                            <p class="footer-text mt-2 mb-0">+254 790 548 479</p>
+                        </div>
+
+                    </div>
+
+                    <hr class="footer-divider">
+
+                    <div class="text-center">
+                        <small class="footer-copyright">
+                            © 2026 MyDuka Inventory System • All Rights Reserved
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div class="modal fade" id="tosModal" tabindex="-1" aria-labelledby="tosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tosModalLabel">Terms of Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>MyDuka is provided as a school project demonstrating a point-of-sale and inventory
+                        management system. By creating an account, you agree to use this system for
+                        educational and demonstration purposes.</p>
+                    <p>Data entered (products, sales, stock) is stored solely for the purpose of this
+                        demonstration and may be reset periodically. Please do not enter real customer
+                        payment information into this system.</p>
+                    <p>For any questions about how your data is used, contact the developer using the
+                        details in the footer.</p>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
 
     <script>
-
-
-        new DataTable('#example');
+        const table = document.getElementById('example');
+        if (table) {
+            new DataTable('#example');
+        }
     </script>
+
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>

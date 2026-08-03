@@ -1,8 +1,46 @@
 {% extends 'base.html' %}
 {% block title %} register {% endblock %}
-{% block content %} 
-<div>
-    <p>register your accunt here</p>
+{% block content %}
+
+<div class="auth-wrapper d-flex justify-content-center align-items-center">
+    <div class="auth-card card shadow-sm p-4">
+        <div class="text-center mb-3">
+            <h3 class="fw-bold mb-1">Get Registered</h3>
+            <p class="text-muted mb-0">Register your account here</p>
+        </div>
+
+        <form action="/register" method="post">
+            <div class="mb-3">
+                <label for="full_Name" class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" id="full_Name"
+                    placeholder="Enter your full name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="email"
+                    placeholder="Enter your email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Phone Number</label>
+                <input type="tel" name="phone" class="form-control" id="phone_number"
+                    placeholder="Enter your phone number" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password"
+                    placeholder="Enter a password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <p class="text-center text-muted mt-3 mb-0">
+            Already have an account? <a href="/login">Login here</a>
+        </p>
+    </div>
 </div>
 
 {% endblock %}

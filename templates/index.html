@@ -1,8 +1,189 @@
 {% extends 'base.html' %}
-{% block title %}homepage {% endblock %}
-{% block content %} 
-<div>
-    <p>this is the homepage</p>
-</div>
+{% block title %} Home {% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section text-center mb-5">
+    <h1 class="hero-title">Run Your Duka Smarter with MyDuka</h1>
+    <p class="hero-subtitle">
+        Track products, record sales, manage stock, and see your profits — all in one simple system
+        built for small shops and dukas.
+    </p>
+    {% if not session.email %}
+    <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+        <a href="/register" class="btn btn-primary btn-lg">Get Started Free</a>
+        <a href="/login" class="btn btn-outline-light btn-lg">I Already Have an Account</a>
+    </div>
+    {% else %}
+    <div class="mt-3">
+        <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
+    </div>
+    {% endif %}
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section-card mb-5">
+    <h2 class="section-title text-center mb-4">Everything Your Duka Needs</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card h-100">
+                <i class="bi bi-box-seam feature-icon"></i>
+                <h5>Product Management</h5>
+                <p class="text-muted mb-0">Add, update, and organize every product in your shop with
+                    buying and selling prices.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card h-100">
+                <i class="bi bi-cart-check feature-icon"></i>
+                <h5>Sales Tracking</h5>
+                <p class="text-muted mb-0">Record every sale as it happens and keep a full history you
+                    can search and review.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card h-100">
+                <i class="bi bi-graph-up-arrow feature-icon"></i>
+                <h5>Profit Insights</h5>
+                <p class="text-muted mb-0">See profit and sales trends per day and per product on your
+                    dashboard, automatically.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-card mb-5">
+    <h2 class="section-title text-center mb-4">How It Works</h2>
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="step-circle">1</div>
+            <h6 class="mt-3">Create an Account</h6>
+            <p class="text-muted small mb-0">Register with your name, email, and phone number.</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-circle">2</div>
+            <h6 class="mt-3">Add Your Products</h6>
+            <p class="text-muted small mb-0">List what you sell along with buying and selling prices.</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-circle">3</div>
+            <h6 class="mt-3">Record Sales</h6>
+            <p class="text-muted small mb-0">Log every sale as customers buy from your duka.</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-circle">4</div>
+            <h6 class="mt-3">Track Performance</h6>
+            <p class="text-muted small mb-0">Check your dashboard for profit and sales trends.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CUSTOMER REVIEWS -->
+<section id="reviews" class="section-card mb-5">
+    <h2 class="section-title text-center mb-4">What Shop Owners Say</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="review-card h-100">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"Before MyDuka I used to write everything in a notebook. Now I
+                    know exactly what's selling and what's not."</p>
+                <div class="review-author">— Mama Njeri, Kawangware</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="review-card h-100">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"The sales page is so simple. My daughter helps me record sales
+                    in seconds, even when the shop is busy."</p>
+                <div class="review-author">— Baba Otieno, Kariobangi</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="review-card h-100">
+                <div class="review-stars">★★★★☆</div>
+                <p class="review-text">"Seeing my profit per day changed how I restock. I now know
+                    which products actually make me money."</p>
+                <div class="review-author">— Faith W., Ngara</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faqs" class="section-card mb-5">
+    <h2 class="section-title text-center mb-4">Frequently Asked Questions</h2>
+    <div class="accordion" id="faqAccordion">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq1">
+                    Is MyDuka free to use?
+                </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Yes. MyDuka is a school project built to demonstrate inventory and sales management
+                    for small shops, and it's completely free to use.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq2">
+                    Do I need internet access to use it?
+                </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Yes, since MyDuka runs as a web application connected to a database, you'll need an
+                    internet or local network connection to access it.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq3">
+                    Can multiple people manage the same shop?
+                </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Every registered user has their own account. Multi-user shared shop accounts aren't
+                    supported yet, but it's a great idea for a future version.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq4">
+                    How do I see my profit?
+                </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    Once logged in, visit your Dashboard — it shows profit per day and profit per
+                    product, calculated automatically from your recorded sales.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- CTA -->
+{% if not session.email %}
+<section class="cta-section text-center">
+    <h3 class="mb-3">Ready to organize your duka?</h3>
+    <a href="/register" class="btn btn-primary btn-lg">Create Your Free Account</a>
+</section>
+{% endif %}
 
 {% endblock %}

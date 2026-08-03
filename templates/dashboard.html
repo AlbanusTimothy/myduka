@@ -1,8 +1,216 @@
 {% extends 'base.html' %}
 {% block title %} dashboard {% endblock %}
-{% block content %} 
-<div>
-    <p>welcome to your dashboard</p>
+{% block content %}
+
+<div class="section-card mb-4">
+    <h3 class="fw-bold mb-1">Welcome back, {{ session.full_name }}</h3>
+    <p class="text-muted mb-0">Here's how your duka is performing.</p>
 </div>
 
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="/products" class="text-decoration-none">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-2"><i class="bi bi-box-seam me-2"></i>Products</h5>
+                    <p class="card-text text-muted mb-0">Manage your product catalog, prices, and stock items.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/sales" class="text-decoration-none">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-2"><i class="bi bi-cart-check me-2"></i>Sales</h5>
+                    <p class="card-text text-muted mb-0">Record new sales and review your sales history.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/stock" class="text-decoration-none">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-2"><i class="bi bi-boxes me-2"></i>Stock</h5>
+                    <p class="card-text text-muted mb-0">Track incoming stock and current inventory levels.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<!-- ANALYTICS -->
+<div class="section-card mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h5 class="fw-bold mb-0">Filter by Date</h5>
+        <div class="d-flex gap-2 align-items-center">
+            <input type="date" id="dayFilter" class="form-control">
+            <button type="button" id="clearDayFilter" class="btn btn-outline-secondary btn-sm">Show All</button>
+        </div>
+    </div>
+    <p class="text-muted mb-0 small" id="dayFilterHint">Showing all recorded days. Pick a date above to zoom into one day.</p>
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="section-card h-100">
+            <h5 class="fw-bold mb-3">Sales per Day</h5>
+            <canvas id="salesPerDayChart" height="140"></canvas>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="section-card h-100">
+            <h5 class="fw-bold mb-3">Profit per Day</h5>
+            <canvas id="profitPerDayChart" height="140"></canvas>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="section-card h-100">
+            <h5 class="fw-bold mb-3">Sales per Product</h5>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Units Sold</th>
+                            <th>Total Sales (KES)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sales_by_product %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ "%.2f"|format(row[2]) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3" class="text-muted text-center">No sales recorded yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="section-card h-100">
+            <h5 class="fw-bold mb-3">Profit per Product</h5>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Total Profit (KES)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in profit_by_product %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ "%.2f"|format(row[1]) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="2" class="text-muted text-center">No profit data yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const salesByDayRaw = {{ sales_by_day | tojson }};
+    const profitByDayRaw = {{ profit_by_day | tojson }};
+
+    function buildDataset(rawRows) {
+        // rawRows: [[date, value], ...] -> { "2026-01-05": value, ... }
+        const map = {};
+        rawRows.forEach(row => { map[row[0]] = row[1]; });
+        return map;
+    }
+
+    const salesMap = buildDataset(salesByDayRaw);
+    const profitMap = buildDataset(profitByDayRaw);
+
+    const allSalesLabels = Object.keys(salesMap).sort();
+    const allProfitLabels = Object.keys(profitMap).sort();
+
+    const salesChart = new Chart(document.getElementById('salesPerDayChart'), {
+        type: 'line',
+        data: {
+            labels: allSalesLabels,
+            datasets: [{
+                label: 'Sales (KES)',
+                data: allSalesLabels.map(d => salesMap[d]),
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    const profitChart = new Chart(document.getElementById('profitPerDayChart'), {
+        type: 'bar',
+        data: {
+            labels: allProfitLabels,
+            datasets: [{
+                label: 'Profit (KES)',
+                data: allProfitLabels.map(d => profitMap[d]),
+                backgroundColor: '#111827'
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    const dayFilter = document.getElementById('dayFilter');
+    const clearBtn = document.getElementById('clearDayFilter');
+    const hint = document.getElementById('dayFilterHint');
+
+    dayFilter.addEventListener('change', () => {
+        const selected = dayFilter.value; // e.g. "2026-01-05"
+        if (!selected) return;
+
+        const hasSales = selected in salesMap;
+        const hasProfit = selected in profitMap;
+
+        salesChart.data.labels = hasSales ? [selected] : [];
+        salesChart.data.datasets[0].data = hasSales ? [salesMap[selected]] : [];
+        salesChart.update();
+
+        profitChart.data.labels = hasProfit ? [selected] : [];
+        profitChart.data.datasets[0].data = hasProfit ? [profitMap[selected]] : [];
+        profitChart.update();
+
+        hint.textContent = (hasSales || hasProfit)
+            ? `Showing data for ${selected}.`
+            : `No sales or profit recorded for ${selected}.`;
+    });
+
+    clearBtn.addEventListener('click', () => {
+        dayFilter.value = '';
+        salesChart.data.labels = allSalesLabels;
+        salesChart.data.datasets[0].data = allSalesLabels.map(d => salesMap[d]);
+        salesChart.update();
+
+        profitChart.data.labels = allProfitLabels;
+        profitChart.data.datasets[0].data = allProfitLabels.map(d => profitMap[d]);
+        profitChart.update();
+
+        hint.textContent = 'Showing all recorded days. Pick a date above to zoom into one day.';
+    });
+</script>
 {% endblock %}
