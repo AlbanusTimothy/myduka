@@ -6,7 +6,7 @@ def get_connection():
         host="localhost",
         port="5432",
         user="postgres",
-        password="Alabaalaba0!",
+        password="**********",
         dbname="myduka_db"
     )
 
